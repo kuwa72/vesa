@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}VESA - ホーム{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="bi bi-house"></i> ようこそ VESA へ</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    VESAはベクトルデータベースとグラフデータベースを使用したWikiシステムです。
+                    ドキュメント同士の関係をグラフとして管理し、高度な検索機能を提供します。
+                </p>
+                <a href="/documents/new" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-plus"></i> 新しいドキュメントを作成
+                </a>
+                <a href="/graph" class="btn btn-outline-primary">
+                    <i class="bi bi-diagram-3"></i> ドキュメントグラフを表示
+                </a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="bi bi-clock-history"></i> 最近のドキュメント</h5>
+            </div>
+            <div class="card-body">
+                {% if documents %}
+                    <div class="list-group">
+                        {% for document in documents %}
+                            <a href="/documents/{{ document.id }}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ document.title }}</h5>
+                                    <small>{{ document.metadata.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <p class="mb-1">{{ document.content[:150] }}{% if document.content|length > 150 %}...{% endif %}</p>
+                                {% if document.metadata.tags %}
+                                    <div class="mt-2">
+                                        {% for tag in document.metadata.tags %}
+                                            <span class="badge bg-secondary">{{ tag }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">ドキュメントがまだありません。新しいドキュメントを作成してください。</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="bi bi-info-circle"></i> VESAについて</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    VESAはesaクローンとして開発されたWikiシステムで、以下の特徴を持っています：
+                </p>
+                <ul>
+                    <li>バックエンドとしてベクトルデータベースを使用</li>
+                    <li>ドキュメント同士の関係をグラフデータベースとして管理</li>
+                    <li>AIから見るためのデータベースを整備するために使用</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="bi bi-tag"></i> 人気のタグ</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    {% if documents %}
+                        {% set tags = [] %}
+                        {% for doc in documents %}
+                            {% for tag in doc.metadata.tags %}
+                                {% if tag not in tags %}
+                                    {% set _ = tags.append(tag) %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        
+                        {% for tag in tags %}
+                            <a href="/search?q={{ tag }}" class="badge bg-primary text-decoration-none">{{ tag }}</a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">タグがまだありません。</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

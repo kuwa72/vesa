@@ -1,0 +1,115 @@
+/* VESA - メインスタイルシート */
+
+/* 全体のスタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+/* ナビゲーションバー */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* カード */
+.card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    font-weight: 500;
+}
+
+/* ドキュメント表示 */
+.markdown-body {
+    padding: 0.5rem;
+}
+
+/* タグ */
+.badge {
+    margin-right: 0.25rem;
+}
+
+/* フッター */
+.footer {
+    margin-top: auto;
+    padding: 1rem 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+/* フォーム */
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* ボタン */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* グラフ表示 */
+#graph-container {
+    background-color: #f8f9fa;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ドキュメントリスト */
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* 検索結果ハイライト */
+.search-highlight {
+    background-color: #ffeb3b;
+    padding: 0.1rem 0.2rem;
+    border-radius: 2px;
+}
+
+/* ドキュメント編集フォーム */
+.CodeMirror {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.editor-toolbar {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+/* アニメーション */
+.fade-in {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

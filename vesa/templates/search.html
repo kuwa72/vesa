@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}検索結果 - VESA{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2 class="card-title mb-0">
+            <i class="bi bi-search"></i> 検索結果
+            {% if query %}
+                <small class="ms-2">「{{ query }}」</small>
+            {% endif %}
+        </h2>
+    </div>
+    <div class="card-body">
+        <form action="/search" method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" value="{{ query or '' }}" placeholder="検索キーワードを入力...">
+                <button class="btn btn-primary" type="submit">検索</button>
+            </div>
+        </form>
+        
+        {% if results %}
+            <div class="list-group">
+                {% for result in results %}
+                    <a href="/documents/{{ result.document.id }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ result.document.title }}</h5>
+                            <span class="badge bg-primary rounded-pill">スコア: {{ "%.2f"|format(result.score) }}</span>
+                        </div>
+                        <p class="mb-1">{{ result.document.content[:200] }}{% if result.document.content|length > 200 %}...{% endif %}</p>
+                        {% if result.document.metadata.tags %}
+                            <div class="mt-2">
+                                {% for tag in result.document.metadata.tags %}
+                                    <span class="badge bg-secondary">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% elif query %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> 「{{ query }}」に一致するドキュメントが見つかりませんでした。
+            </div>
+            <div class="text-center mt-4">
+                <a href="/documents/new" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-plus"></i> 新しいドキュメントを作成
+                </a>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> 検索キーワードを入力してください。
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

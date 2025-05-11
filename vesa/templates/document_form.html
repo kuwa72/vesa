@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_new %}新規ドキュメント作成{% else %}{{ document.title }} の編集{% endif %} - VESA{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<style>
+    .CodeMirror, .CodeMirror-scroll {
+        min-height: 300px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2 class="card-title mb-0">
+            {% if is_new %}
+                <i class="bi bi-file-earmark-plus"></i> 新規ドキュメント作成
+            {% else %}
+                <i class="bi bi-pencil"></i> {{ document.title }} の編集
+            {% endif %}
+        </h2>
+    </div>
+    <div class="card-body">
+        <form method="post" action="{% if is_new %}/documents/new{% else %}/documents/{{ document.id }}/edit{% endif %}">
+            <div class="mb-3">
+                <label for="title" class="form-label">タイトル</label>
+                <input type="text" class="form-control" id="title" name="title" required
+                       value="{% if document %}{{ document.title }}{% endif %}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="content" class="form-label">内容</label>
+                <textarea class="form-control" id="content" name="content" rows="10">{% if document %}{{ document.content }}{% endif %}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="tags" class="form-label">タグ (カンマ区切り)</label>
+                <input type="text" class="form-control" id="tags" name="tags"
+                       value="{% if document and document.metadata.tags %}{{ document.metadata.tags|join(', ') }}{% endif %}">
+                <div class="form-text">例: 開発, ドキュメント, プロジェクト</div>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{% if is_new %}/{% else %}/documents/{{ document.id }}{% endif %}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> キャンセル
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> 保存
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script>
+    const easyMDE = new EasyMDE({
+        element: document.getElementById('content'),
+        spellChecker: false,
+        autosave: {
+            enabled: true,
+            uniqueId: 'vesa-document-{% if document %}{{ document.id }}{% else %}new{% endif %}',
+            delay: 1000,
+        },
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', 'code', 'table', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ]
+    });
+</script>
+{% endblock %}

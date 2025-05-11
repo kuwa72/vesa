@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}エラー {{ error_code }} - VESA{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-1 fw-bold text-danger">{{ error_code }}</h1>
+    <p class="fs-3 text-muted">{{ error_message }}</p>
+    <p class="lead">
+        申し訳ありませんが、問題が発生しました。
+    </p>
+    <div class="mt-4">
+        <a href="/" class="btn btn-primary">
+            <i class="bi bi-house"></i> ホームに戻る
+        </a>
+    </div>
+</div>
+{% endblock %}
